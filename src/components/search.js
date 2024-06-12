@@ -1,24 +1,24 @@
 import * as React from 'react';
-import Paper from '@mui/material/Paper';
-import InputBase from '@mui/material/InputBase';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+
 
 export default function SearchInput() {
     return (
-        <Paper
+        <Box
             component="form"
-            elevation={0}
-            sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: { sm: `calc(100%)` }, borderRadius: 30 }}
+            sx={{
+                '& > :not(style)': { m: 1 },
+            }}
+            noValidate
+            autoComplete="off"
         >
-            <IconButton sx={{ p: '10px' }} aria-label="menu">
-                <SearchIcon />
-            </IconButton>
-            <InputBase
-                placeholder="Search Ello Library"
-                inputMode='text'
-                inputProps={{ 'aria-label': 'ello library' }}
-            />
-        </Paper>
+            <TextField
+                id="filled-basic"
+                fullWidth="true"
+                label="Search Ello Library"
+            ></TextField>
+
+        </Box>
     );
 }
