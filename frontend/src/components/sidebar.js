@@ -98,7 +98,7 @@ function ResponsiveDrawer(props) {
         <Box sx={{ display: 'flex' }}>
             <AppBar
                 position="fixed"
-                color="transparent"
+                color="white"
                 elevation={1}
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
@@ -204,7 +204,7 @@ function ResponsiveDrawer(props) {
             >
                 <Toolbar />
 
-                <MainSection searchResults={[2,3,4]}></MainSection>
+                <MainSection searchResults={[]}></MainSection>
             </Box>
         </Box>
     );

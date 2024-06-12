@@ -10,3 +10,15 @@ export const GET_BOOKS = gql`
         }
     }
 `;
+
+
+export const SEARCH_BOOKS = gql`
+    query SearchBooks($searchTerm: String!) {
+        books(filter: { title: { like: $searchTerm } }) {
+            author
+            coverPhotoURL
+            readingLevel
+            title
+        }
+    }
+`;

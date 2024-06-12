@@ -15,12 +15,12 @@ const client = new ApolloClient({
 });
 
 root.render(
-  <ApolloProvider client={client}>
-    <ThemeProvider theme={theme}>
+  <ThemeProvider theme={theme}>
+    <ApolloProvider client={client}>
       <CssBaseline />
       <App />
-    </ThemeProvider>
-  </ApolloProvider>,
+    </ApolloProvider>
+  </ThemeProvider>,
 
 );
 
