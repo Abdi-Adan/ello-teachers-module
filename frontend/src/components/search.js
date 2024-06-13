@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 
 
-export default function SearchInput() {
+export default function SearchInput({ setSearchTerm, handleSearchBooks }) {
     return (
         <Box
             component="form"
@@ -15,8 +15,12 @@ export default function SearchInput() {
         >
             <TextField
                 id="filled-basic"
-                fullWidth="true"
+                fullWidth={true}
                 label="Search Ello Library"
+                onChange={function (e) {
+                    setSearchTerm(e.target.value);
+                    return handleSearchBooks;
+                }}
             ></TextField>
 
         </Box>

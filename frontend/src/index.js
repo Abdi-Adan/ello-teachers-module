@@ -1,26 +1,20 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloWrapper } from './graphql/apolloClient.js';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
-import App from './App';
-import theme from './theme';
+import App from './App.js';
+import theme from './theme.js';
 
 const rootElement = document.getElementById('root');
 const root = ReactDOM.createRoot(rootElement);
 
-const client = new ApolloClient({
-  uri: 'http://localhost:4000/',
-  cache: new InMemoryCache(),
-});
-
 root.render(
   <ThemeProvider theme={theme}>
-    <ApolloProvider client={client}>
+    <ApolloWrapper>
       <CssBaseline />
       <App />
-    </ApolloProvider>
+    </ApolloWrapper>
   </ThemeProvider>,
-
 );
 
