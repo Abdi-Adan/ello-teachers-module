@@ -7,6 +7,19 @@ export const GET_BOOKS = gql`
             coverPhotoURL
             readingLevel
             title
+            inReadingList
+        }
+    }
+`;
+
+export const READING_LIST = gql`
+    query ReadingList {
+        readingList {
+            author
+            coverPhotoURL
+            readingLevel
+            title
+            inReadingList
         }
     }
 `;
@@ -14,11 +27,12 @@ export const GET_BOOKS = gql`
 
 export const SEARCH_BOOKS = gql`
     query SearchBooks($searchTerm: String!) {
-        books(filter: { title: { like: $searchTerm } }) {
+        search(title: $searchTerm) {
+            title
             author
             coverPhotoURL
             readingLevel
-            title
+            inReadingList
         }
     }
 `;
