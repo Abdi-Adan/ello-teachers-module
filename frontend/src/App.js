@@ -6,7 +6,9 @@ import Sidebar from './components/sidebar.js';
 import SearchAppBar from './components/appbar.js';
 import Toolbar from '@mui/material/Toolbar';
 import BookCard from './components/bookCard.js';
+import Button from '@mui/material/Button';
 import SearchInput from './components/search.js';
+
 import { GET_BOOKS, READING_LIST, SEARCH_BOOKS } from './graphql/queries.js';
 import { UPDATE_READING_LIST } from "./graphql/mutations.js";
 
@@ -15,7 +17,6 @@ const sidebarWidth = 200;
 export default function App() {
   const [books, setBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [book, setBook] = useState({});
 
   // Responsive Appbar and Sidebar vars&functions
   const [isClosing, setIsClosing] = useState(false);
@@ -25,21 +26,18 @@ export default function App() {
   const { loading: loadingBooks, error: errorBooks, data: booksData, refetch: refetchBooks } = useQuery(GET_BOOKS);
 
   // Query to get the reading list
-  const { data: readingListData, refetch: refetchReadingList } = useQuery(READING_LIST, {
+  const { refetch: refetchReadingList } = useQuery(READING_LIST, {
     skip: true,
   });
 
   // Query to search books
-  const { data: searchBooksData, refetch: refetchSearchBooks } = useQuery(SEARCH_BOOKS, {
-    variables: { term: searchTerm },
+  const { refetch: refetchSearchBooks } = useQuery(SEARCH_BOOKS, {
+    variables: { searchTerm: searchTerm },
     skip: true,
   });
 
   // Mutation to update the reading list
-  const { data: updateReadingList, refetch: refetchUpdateReadingList } = useMutation(UPDATE_READING_LIST, {
-    variables: { book: book },
-    skip: true,
-  });
+  const [updateReadingList] = useMutation(UPDATE_READING_LIST);
 
   useEffect(() => {
     if (booksData) {
@@ -64,14 +62,21 @@ export default function App() {
   // Function to trigger the search books query
   const handleSearchBooks = () => {
     refetchSearchBooks().then(({ data }) => {
-      setBooks(data.books[0]);
+      setBooks(data.search);
     });
   };
 
   // Function to update the reading list
   const handleUpdateReadingList = (book) => {
-    updateReadingList({ variables: { book } }).then(({ data }) => {
-      setBooks(data.updateReadingList.books);
+    const updatedBook = {
+      "author": book.author,
+      "coverPhotoURL": book.coverPhotoURL,
+      "readingLevel": book.readingLevel,
+      "title": book.title,
+      "inReadingList": book.inReadingList
+    };
+    updateReadingList({ variables: { book: updatedBook } }).then(({ data }) => {
+      setBooks(data.updateReadingList);
     });
   };
 
@@ -81,7 +86,9 @@ export default function App() {
   return (
     <Box sx={{ display: 'flex' }}>
 
-      <SearchAppBar sidebarWidth={sidebarWidth} isClosing={isClosing} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} searchInput={<SearchInput handleSearchBooks={handleSearchBooks} setSearchTerm={setSearchTerm} />} />
+      <SearchAppBar sidebarWidth={sidebarWidth} isClosing={isClosing} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen}
+        searchInput={<SearchInput handleSearchBooks={handleSearchBooks} setSearchTerm={setSearchTerm} />}
+      />
 
       <Sidebar sidebarWidth={sidebarWidth} setIsClosing={setIsClosing} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} bookShelfOnClick={handleFetchBooks} readingListOnClick={handleFetchReadingList} />
 
@@ -95,7 +102,16 @@ export default function App() {
           <Grid container spacing={2} mt={3}>
             {books.map((book, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
-                <BookCard book={book} handleUpdateReadingList={handleUpdateReadingList} />
+                <BookCard book={book} handleUpdateReadingList={handleUpdateReadingList}
+                  button={
+                    <Box my={2} >
+                      <Button variant="outlined" onClick={() => handleUpdateReadingList(book)
+                      }>
+                        {book.inReadingList ? 'Remove from Reading List' : 'Add to Reading List'}
+                      </Button>
+                    </Box>
+                  }
+                />
               </Grid>
             ))}
           </Grid>

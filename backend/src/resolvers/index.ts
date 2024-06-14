@@ -3,11 +3,22 @@ import { booksData } from '../data/books';
 export const resolvers = {
   Query: {
     books: () => booksData,
-    search: (_: any, args: any) => booksData.filter((booksData) => booksData.title.includes(args.title) || booksData.author.includes(args.title)),
+    search: function (_: any, args: any) {
+      let term = args.title;
+
+      const lowerCaseTerm = term.trim().toLowerCase();
+
+      return booksData.filter(book =>
+        (book.title && book.title.toLowerCase().includes(lowerCaseTerm)) || (book.author && book.author.toLowerCase().includes(lowerCaseTerm))
+      );
+
+      // return booksData.filter((booksData) => booksData.title.includes(term) || booksData.author.includes(term));
+    },
     readingList: () => booksData.filter((booksData) => booksData.inReadingList === true)
   },
   Mutation: {
-    updateReadingList(_: any, args: any) {
+    updateReadingList: function (_: any, args: any) {
+      let newBookdata;
       let newBook = {
         ...args.book,
         inReadingList: !args.book.inReadingList
@@ -17,9 +28,10 @@ export const resolvers = {
 
       if (index >= 0 && index < booksData.length) {
         booksData[index] = newBook;
+        newBookdata = booksData;
       }
 
-      return newBook;
+      return newBookdata;
     }
   }
 };

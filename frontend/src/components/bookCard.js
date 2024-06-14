@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, Typography, CardMedia } from '@mui/material';
 
-const BookCard = ({ book, handleUpdateReadingList }) => {
+const BookCard = ({ book, button }) => {
   return (
     <Card>
       <CardMedia
@@ -17,14 +17,9 @@ const BookCard = ({ book, handleUpdateReadingList }) => {
         <Typography variant="body2" color="text.secondary">
           {book.author}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {book.readingLevel}
-        </Typography>
-        <button onClick={() => handleUpdateReadingList(book)}>
-          {book.inReadingList ? 'Remove from Reading List' : 'Add to Reading List'}
-        </button>
+        {button}
       </CardContent>
-    </Card>
+    </Card >
   );
 };
 
